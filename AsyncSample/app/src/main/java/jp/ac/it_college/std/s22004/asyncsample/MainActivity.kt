@@ -2,21 +2,22 @@ package jp.ac.it_college.std.s22004.asyncsample
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.annotation.UiThread
 import androidx.annotation.WorkerThread
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import jp.ac.it_college.std.s22004.asyncsample.databinding.ActivityMainBinding
+import java.net.HttpURLConnection
+import java.net.SocketTimeoutException
+import java.net.URL
 import java.util.concurrent.Callable
-import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
     companion object {
         private const val DEBUG_TAG = "AsyncSample"
         private const val WEATHER_INFO_URL =
-            "https://api.openweathermap.org/data/2.5/wweather?lang=ja"
+            "https://api.openweathermap.org/data/2.5/weather?lang=ja"
         private const val APP_ID = BuildConfig.APP_ID
     }
     private lateinit var binding: ActivityMainBinding
@@ -35,16 +36,33 @@ class MainActivity : AppCompatActivity() {
 
     @UiThread
     private fun receiveWeatherInfo(q: String) {
-        val url = "$WEATHER_INFO_URL&q&appid=$APP_ID"
+        val url = "$WEATHER_INFO_URL&q=$q&appid=$APP_ID"
         val executorService = Executors.newSingleThreadExecutor()
-        val backgroundReceiver = WeatherInfoBackgroundReceiver()
+        val backgroundReceiver = WeatherInfoBackgroundReceiver(url)
         val future = executorService.submit(backgroundReceiver)
         val result = future.get()
+        binding.tvWeatherDesc.text = result
     }
-    private class WeatherInfoBackgroundReceiver() : Callable<String> {
+    private class WeatherInfoBackgroundReceiver(val urlString: String) : Callable<String> {
         @WorkerThread
         override fun call(): String {
-            return "hoge"
+            val url = URL(urlString)
+            val con = url.openConnection() as HttpURLConnection
+            con.apply {
+                connectTimeout = 1000
+                readTimeout = 1000
+                requestMethod = "GET"
+            }
+            return try {
+                con.connect()
+                val result = con.inputStream.reader().readText()
+
+                con.disconnect()  //切断を知らせる　絶対に必要らしい
+                result
+            } catch (ex: SocketTimeoutException) {
+                Log.w(DEBUG_TAG, "通信タイムアウト", ex)
+                ""
+            }
         }
     }
 }
