@@ -6,9 +6,9 @@ data class City (
 )
 
 val cityList = listOf(
-    City("京都","Kyoto"),
-    City("大阪", "Osaka"),
     City("沖縄", "Naha"),
+    City("大阪", "Osaka"),
+    City("京都","Kyoto"),
     City("大津","Otu"),
     City("愛知","Aichi"),
     City("神奈川","Kanagawa"),
