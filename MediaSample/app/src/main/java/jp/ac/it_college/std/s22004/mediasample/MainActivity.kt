@@ -34,6 +34,8 @@ class MainActivity : AppCompatActivity() {
         binding.btForward.isEnabled = true
     }
 
+
+
     private fun mediaPlayerOnCompletion(mediaPlayer: MediaPlayer) {
         binding.btPlay.setText(R.string.bt_play_play)
     }
@@ -50,4 +52,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStop() {
+        mediaPlayer?.run {
+            if (isPlaying) {
+                stop()
+            }
+            release()
+        }
+        super.onStop()
+    }
 }
