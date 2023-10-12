@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.CompoundButton
 import jp.ac.it_college.std.s22004.mediasample.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -17,15 +18,19 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         mediaPlayer = MediaPlayer()
-        val mediaFileUri = Uri.parse("android.resource://${packageName}/${R.raw.flow}")  //https://~~~~~
+        val mediaFileUri =
+            Uri.parse("android.resource://${packageName}/${R.raw.flow}")  //https://~~~~~
         mediaPlayer?.apply {
             setDataSource(applicationContext, mediaFileUri)
             setOnPreparedListener(::mediaPlayerOnPrepared)
             setOnCompletionListener(::mediaPlayerOnCompletion)
             prepareAsync()
         }
-
         binding.btPlay.setOnClickListener(::onPlayButtonClick)
+        binding.btBack.setOnClickListener(::onBackButtonClick)
+        binding.btForward.setOnClickListener(::onForwardButtonClick)
+        binding.swLoop.setOnCheckedChangeListener(::onLoopSwitchChanged)
+
     }
 
     private fun mediaPlayerOnPrepared(mediaPlayer: MediaPlayer) {
@@ -33,7 +38,6 @@ class MainActivity : AppCompatActivity() {
         binding.btBack.isEnabled = true
         binding.btForward.isEnabled = true
     }
-
 
 
     private fun mediaPlayerOnCompletion(mediaPlayer: MediaPlayer) {
@@ -60,5 +64,22 @@ class MainActivity : AppCompatActivity() {
             release()
         }
         super.onStop()
+    }
+
+    private fun onBackButtonClick(view: View) {
+        mediaPlayer?.seekTo(0)
+    }
+    private fun onForwardButtonClick(view: View) {
+        mediaPlayer?.run {
+            seekTo(duration)
+            if (!isPlaying) {
+                binding.btPlay.setText(R.string.bt_play_pause)
+                start()
+            }
+        }
+    }
+
+    private fun onLoopSwitchChanged(buttonView: CompoundButton, isChecked: Boolean) {
+        mediaPlayer?.isLooping = isChecked
     }
 }
