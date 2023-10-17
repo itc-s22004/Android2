@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Media3ServiceSample</string>
+    <string name="bt1">再生</string>
+    <string name="bt2">停止</string>
+
+</resources>
