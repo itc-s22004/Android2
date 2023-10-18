@@ -31,6 +31,12 @@ class MainActivity : AppCompatActivity() {
         binding.btPlay.setOnClickListener { startSoundManagerService() }
         binding.btStop.setOnClickListener { stopSoundManagerService() }
         notificationParmissionRequest()
+        val fromNotification = intent.getBooleanExtra("fromNotification", false)
+        if (fromNotification) {
+            binding.btPlay.isEnabled = false
+            binding.btStop.isEnabled = false
+
+        }
     }
     private fun startSoundManagerService() {
         val intent = Intent(this, SoundManageService::class.java)
