@@ -37,8 +37,8 @@ class SecondFragment : Fragment() {
         super.onDestroy()
     }
 
-    private fun toNext(choise: Int) {
-        val bundle = bundleOf("choise" to choise)
-        findNavController().navigate(R.id.action_secondFragment_to_threadFragment, bundle)
+    private fun toNext(choice: Int) {
+        val action = SecondFragmentDirections.actionSecondFragmentToThreadFragment(choice)
+        findNavController().navigate(action)
     }
 }

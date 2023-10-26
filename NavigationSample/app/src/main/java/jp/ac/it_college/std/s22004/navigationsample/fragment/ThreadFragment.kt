@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.navArgs
 import jp.ac.it_college.std.s22004.navigationsample.R
 import jp.ac.it_college.std.s22004.navigationsample.databinding.FragmentSecondBinding
 import jp.ac.it_college.std.s22004.navigationsample.databinding.FragmentThreadBinding
@@ -13,6 +14,7 @@ import jp.ac.it_college.std.s22004.navigationsample.databinding.FragmentThreadBi
 class ThreadFragment : Fragment() {
     private var _binding: FragmentThreadBinding? = null
     private val binding get() = _binding!!
+    private val args: ThreadFragmentArgs by navArgs()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -23,11 +25,11 @@ class ThreadFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val choise = arguments?.getInt("choise", 0)
-        binding.display.text = "<$choise>"
+        binding.display.text = "<${args.choice}>"
     }
 
     override fun onDestroyView() {
+        _binding = null
         super.onDestroyView()
     }
 

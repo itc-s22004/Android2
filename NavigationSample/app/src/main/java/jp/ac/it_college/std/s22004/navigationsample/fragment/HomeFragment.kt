@@ -26,9 +26,8 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.homeToNext.setOnClickListener {toNext()}
+        binding.homeToNext.setOnClickListener { toNext() }
     }
-
 
 
     override fun onDestroyView() {
@@ -36,7 +35,8 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
     }
     private fun toNext() {
-        findNavController().navigate(R.id.action_homeFragment_to_secondFragment)
+        val action = HomeFragmentDirections.actionHomeFragmentToSecondFragment()
+        findNavController().navigate(action)
     }
 
 }

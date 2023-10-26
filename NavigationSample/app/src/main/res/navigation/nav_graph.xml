@@ -26,5 +26,10 @@
         android:id="@+id/threadFragment"
         android:name="jp.ac.it_college.std.s22004.navigationsample.fragment.ThreadFragment"
         android:label="fragment_thread"
-        tools:layout="@layout/fragment_thread" />
+        tools:layout="@layout/fragment_thread" >
+        <argument
+            android:name="choice"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
 </navigation>
