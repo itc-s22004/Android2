@@ -21,6 +21,10 @@
         <action
             android:id="@+id/action_secondFragment_to_threadFragment"
             app:destination="@id/threadFragment" />
+        <action
+            android:id="@+id/action_secondFragment_to_homeFragment2"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/fade_out_left" />
     </fragment>
     <fragment
         android:id="@+id/threadFragment"
