@@ -1,11 +1,14 @@
 package jp.ac.it_college.std.s22004.poke3
 
+import android.inputmethodservice.Keyboard
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -29,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import jp.ac.it_college.std.s22004.poke3.api.Games
 import jp.ac.it_college.std.s22004.poke3.ui.theme.Poke3Theme
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
@@ -66,17 +70,26 @@ fun MainScene(
             ElevatedButton(
                 modifier = Modifier.padding(vertical = 8.dp),
                 onClick = {
-//                    scope.launch {
-                        val range = (10..20)
-//                        println(range.random())
-                        num = range.random()
-//                        for (i in 0 .. 8) {
-//                            gen.add(Games.getGenerations().results[i].url)
-//                            resultText = "$gen"
-//                        }
-////                            resultText = Games.getGenerations().results[0].url
+                    scope.launch {
 
-//                    }
+                        val genMin = Games.getPokemon().pokemonSpecies[0]
+//                        val genMax = Games.getPokemon().pokemonSpecies.last().url
+                        val genSize =
+                            Games.getPokemon().pokemonSpecies.size//非同期はlaunch必要
+
+//                        val range = (genMin .. genSize)
+                        val range = (0..genSize)
+                        num = range.random()
+
+
+                        //generation
+//                        for (i in 0 until  Games.getGenerations().results.size) {
+//                            gen.add(Games.getGenerations().results[i].url)
+//                        }
+//                        resultText = "$gen"
+//                        resultText = genMin
+
+                    }
 
                 }
             ) {
@@ -98,13 +111,26 @@ fun MainScene(
                     contentScale = ContentScale.Fit
                 )
             }
+            for (i in 0..3) {
+                Btn()
+            }
         }
     }
 }
 
 @Composable
 fun Btn(modifier: Modifier = Modifier) {
-
+    Surface(
+        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
+    ) {
+        Row(modifier = Modifier.padding(8.dp)) {
+            Column(modifier = Modifier.weight(1f)) {
+                ElevatedButton(onClick = { /*TODO*/ }, Modifier.fillMaxWidth()) {
+                    Text(text = "name")
+                }
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true)
@@ -112,5 +138,29 @@ fun Btn(modifier: Modifier = Modifier) {
 fun MainScenePreview() {
     Poke3Theme {
         MainScene(Modifier.fillMaxSize())
+    }
+}
+
+@Composable
+fun Generate(
+    modifier: Modifier = Modifier,
+) {
+    val gen = mutableListOf("")
+    val scope = rememberCoroutineScope()
+
+    Surface {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GeneratePreview() {
+    Poke3Theme {
+        Generate(Modifier.fillMaxSize())
     }
 }

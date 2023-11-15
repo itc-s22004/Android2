@@ -11,7 +11,7 @@ data class Generation(
     val abilities: List<NamedApiResource>,
     val names: List<Name>,
     @SerialName("main_region") val mainRegion: NamedApiResource,
-    val moves: NamedApiResource,
+    val moves: List<NamedApiResource>,
     @SerialName("pokemon_species") val pokemonSpecies: List<NamedApiResource>,
     val types: List<NamedApiResource>,
     @SerialName("version_groups") val versionGroups: List<NamedApiResource>,

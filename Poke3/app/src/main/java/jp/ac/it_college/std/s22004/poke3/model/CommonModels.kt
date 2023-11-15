@@ -13,6 +13,11 @@ data class NamedApiResourceList(
     val results: List<NamedApiResource>,
 )
 
+@Serializable
+data class Gomi(
+    val next: String?
+)
+
 // Utility Languages
 @Serializable
 data class Language(
