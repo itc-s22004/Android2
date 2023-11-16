@@ -1,4 +1,6 @@
 package jp.ac.it_college.std.s22004.poketeacher.title
+
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,15 +15,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import jp.ac.it_college.std.nakasone.pokemon_silhouette_quiz.R
+import jp.ac.it_college.std.s22004.poketeacher.R
 import jp.ac.it_college.std.s22004.poketeacher.ui.theme.PokeTeacherTheme
 
 @Composable
-fun TitleScene(modifier: Modifier = Modifier) {
+fun TitleScene(
+    modifier: Modifier = Modifier,
+    onTitleClick: () -> Unit = {}
+) {
     Surface(modifier) {
         // 念のため、縦に並べられるように。
         Column(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxSize().clickable(onClick = onTitleClick),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // タイトル

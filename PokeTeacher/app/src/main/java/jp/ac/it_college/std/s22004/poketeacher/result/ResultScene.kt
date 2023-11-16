@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import jp.ac.it_college.std.nakasone.pokemon_silhouette_quiz.R
+import jp.ac.it_college.std.s22004.poketeacher.R
 import jp.ac.it_college.std.s22004.poketeacher.ui.theme.PokeTeacherTheme
 
 

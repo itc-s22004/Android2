@@ -1,4 +1,5 @@
 package jp.ac.it_college.std.s22004.poketeacher.generation
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,17 +13,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import jp.ac.it_college.std.nakasone.pokemon_silhouette_quiz.R
+import jp.ac.it_college.std.s22004.poketeacher.R
 import jp.ac.it_college.std.s22004.poketeacher.ui.theme.PokeTeacherTheme
 
+
 @Composable
-fun SelectGenerationScene(modifier: Modifier = Modifier) {
+fun SelectGenerationScene(modifier: Modifier = Modifier, onGenerationSelected: (Int) -> Unit = {}) {
     Surface(modifier) {
         // 今は第9世代のみ仮で。
         // 将来的に全世代を表示して選択できるようにしたい。
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             items(1) {
-                ItemGeneration(generation = 9, seriesName = "スカーレット/バイオレット")
+                Generation(
+                    generation = 9,
+                    seriesName = "スカーレット/バイオレット",
+                    onGenerationSelected = onGenerationSelected
+                )
             }
         }
     }
@@ -32,13 +38,14 @@ fun SelectGenerationScene(modifier: Modifier = Modifier) {
  * ポケモンの世代とシリーズ名を出すやつ
  */
 @Composable
-fun ItemGeneration(generation: Int, seriesName: String) {
+fun Generation(generation: Int, seriesName: String, onGenerationSelected: (Int) -> Unit = {}) {
     // 背景色・文字色を全体的に設定するために使ってる
     Surface(
         color = MaterialTheme.colorScheme.tertiary,
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
+            .clickable { onGenerationSelected(generation) }
     ) {
         Column(
             modifier = Modifier

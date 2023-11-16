@@ -1,4 +1,5 @@
 package jp.ac.it_college.std.s22004.poketeacher.quiz
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,23 +18,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import jp.ac.it_college.std.s22004.poketeacher.model.PokeQuiz
 import jp.ac.it_college.std.s22004.poketeacher.ui.theme.PokeTeacherTheme
-
 @Composable
 fun QuizScene(
-    imageUrl: String,
-    choices: List<String>,
+    quiz: PokeQuiz,
     modifier: Modifier = Modifier,
 ) {
     Surface(modifier) {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            PokeImage(imageUrl)
-            PokeNameList(choices)
+            PokeImage(quiz.imageUrl)
+            PokeNameList(quiz.choices)
         }
     }
 }
@@ -56,7 +59,17 @@ fun PokeImage(imageUrl: String, isSilhouette: Boolean = true) {
                 .clip(RoundedCornerShape(20))
                 .background(MaterialTheme.colorScheme.secondaryContainer)
         ) {
-            AsyncImage(model = imageUrl, contentDescription = "PokeImage")
+            AsyncImage(
+                model = imageUrl,
+                contentDescription = "PokeImage",
+                // カラーフィルターでシルエット表示みたいなことができる。
+                // 画像加工の詳細は各自で勉強してください
+                colorFilter = if (isSilhouette) ColorFilter.tint(
+                    Color.Blue,
+                    BlendMode.SrcIn
+                ) else null,
+                modifier = Modifier.fillMaxSize()
+            )
         }
     }
 }
@@ -87,7 +100,7 @@ fun PokeName(name: String) {
 @Composable
 fun PokeNameList(items: List<String>) {
     LazyColumn() {
-        items(items.shuffled()) {
+        items(items) {
             PokeName(name = it)
         }
     }
@@ -98,8 +111,11 @@ fun PokeNameList(items: List<String>) {
 fun QuizScenePreview() {
     PokeTeacherTheme {
         QuizScene(
-            imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/906.png;",
-            choices = listOf("ニャオハ", "ホゲータ", "クワッス", "グルトン"),
+            PokeQuiz(
+                imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/906.png;",
+                choices = listOf("ニャオハ", "ホゲータ", "クワッス", "グルトン"),
+                correct = "ニャオハ"
+            ),
             modifier = Modifier.fillMaxSize()
         )
     }

@@ -17,12 +17,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             PokeTeacherTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    // あとからNavigationを使って各画面をここに設置する
-                }
+                PokeNavigation()
             }
         }
     }
