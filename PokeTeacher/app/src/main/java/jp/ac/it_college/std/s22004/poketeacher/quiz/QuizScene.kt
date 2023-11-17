@@ -1,5 +1,6 @@
 package jp.ac.it_college.std.s22004.poketeacher.quiz
 
+import android.content.IntentSender.OnFinished
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -20,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,15 +36,19 @@ import coil.compose.AsyncImage
 import jp.ac.it_college.std.s22004.poketeacher.R
 import jp.ac.it_college.std.s22004.poketeacher.model.PokeQuiz
 import jp.ac.it_college.std.s22004.poketeacher.ui.theme.PokeTeacherTheme
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun QuizScene(
     quiz: PokeQuiz,
     modifier: Modifier = Modifier,
+    onFinished: (Boolean) -> Unit = {},
 ) {
     var state by remember {
         mutableIntStateOf(0)
     }
+    val scope = rememberCoroutineScope()
     Surface(modifier) {
         Column(
             modifier = Modifier.fillMaxWidth()
@@ -50,6 +56,11 @@ fun QuizScene(
             PokeImage(quiz.imageUrl, state)
             PokeNameList(quiz.choices, state == 0) {
                 state = if (it == quiz.correct) 1 else - 1
+
+                scope.launch {
+                    delay(3000)
+                    onFinished(state > 0)
+                }
             }
         }
     }

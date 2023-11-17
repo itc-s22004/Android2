@@ -7,6 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -39,6 +40,7 @@ fun PokeNavigation(
     // AppBar の文言を保持するやつ
     var titleText by remember { mutableStateOf("") }
     var quizData by remember { mutableStateOf(listOf<PokeQuiz>()) }
+    var score by remember { mutableIntStateOf(0) }
 
     // Scaffold を使うと、NavHost 以外の部分の構築を手っ取り早くできる。
     Scaffold(
@@ -71,9 +73,12 @@ fun PokeNavigation(
             composable(Destinations.GENERATION) {
                 // 世代選択画面
                 titleText = stringResource(id = R.string.please_select_generation)
+                score = 0
                 SelectGenerationScene(onGenerationSelected = { gen ->
                     quizData = generateQuizData(gen)
-                    navController.navigate("quiz/0")
+                    navController.navigate("quiz/0") {
+                        popUpTo(Destinations.GENERATION)
+                    }
                 })
             }
 
@@ -82,14 +87,29 @@ fun PokeNavigation(
                 // [arguments] パラメータに前のデスティネーションから受け取るデータを定義する
                 arguments = listOf(navArgument("order") { type = NavType.IntType })
             ) {
-                titleText = ""
+
+                titleText = stringResource(id = R.string.who)
                 // composable#arguments の定義に従って取得できるようになる。非タイプセーフ
                 val order = it.arguments?.getInt("order") ?: 0
-                QuizScene(quizData[order])
+                QuizScene(quizData[order]) {
+                    score += if (it) 1 else 0
+                    val next = order + 1
+                    if (quizData.size > next) {
+                        navController.navigate("quiz/$next")
+                    } else {
+                        navController.navigate(Destinations.RESULT)
+                    }
+                }
             }
-
             composable(Destinations.RESULT) {
-                ResultScene(result = 0)
+                titleText = ""
+                ResultScene(result = score,
+                    onClickGenerationButton = {
+                        navController.popBackStack()
+                    },
+                    onClickTitleButton = {
+                        navController.popBackStack(Destinations.TITLE, false)
+                    })
             }
         }
     }
@@ -105,6 +125,21 @@ fun generateQuizData(generation: Int): List<PokeQuiz> {
             // QuizScene にデータを渡したあとだと、再コンポーズ時に毎回シャッフルされる
             choices = listOf("ニャオハ", "ホゲータ", "クワッス", "グルトン").shuffled(),
             correct = "ニャオハ"
+        ),
+        PokeQuiz(
+            imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/909.png",
+            choices = listOf("ニャオハ", "ホゲータ", "クワッス", "グルトン").shuffled(),
+            correct = "ホゲータ"
+        ),
+        PokeQuiz(
+            imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/912.png",
+            choices = listOf("ニャオハ", "ホゲータ", "クワッス", "グルトン").shuffled(),
+            correct = "クワッス"
+        ),
+        PokeQuiz(
+            imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/915.png",
+            choices = listOf("ニャオハ", "ホゲータ", "クワッス", "グルトン").shuffled(),
+            correct = "グルトン"
         ),
     )
 }
