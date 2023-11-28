@@ -156,7 +156,7 @@ fun QuizScenePreview() {
     PokeTeacherTheme {
         QuizScene(
             PokeQuiz(
-                imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/906.png;",
+                imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/906.png",
                 choices = listOf("ニャオハ", "ホゲータ", "クワッス", "グルトン"),
                 correct = "ニャオハ"
             ),
